@@ -59,7 +59,9 @@ namespace ParserCSVTest
         public FileCSV(string path, string file)
         {
             if (!Directory.Exists(path))
+            {
                 throw new Exception("Invalid path");
+            }
 
             myPath = path;
             myFn = Path.Combine(path, file);
@@ -103,6 +105,11 @@ namespace ParserCSVTest
             t.Stop();
             Console.WriteLine("Passed: {0}", t.Elapsed);
         }
+
+        public void ReadFile2DB()
+        {
+            
+        }
     }
 
 
@@ -110,7 +117,7 @@ namespace ParserCSVTest
     {
         public static void Main(string[] args)
         {
-            string myPath = @"C:\Users\rui.vilela\Downloads\ParserV2\ParserCSVTest\ParserCSVTest\files";
+            string myPath = Environment.CurrentDirectory;
             FileCSV csv = new FileCSV(myPath, "Teste.csv");
 
             csv.Write2File((int)Math.Pow(10,7), 40);
@@ -120,9 +127,7 @@ namespace ParserCSVTest
             //    string s = generateCSV.GenerateLine();
             //    Console.WriteLine("Res: " + s);
             //}
-
             
-
             Console.ReadLine();
         }
     }
