@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using ParserCSVTest.Data;
+using System.Data;
 
 namespace ParserCSVTest
 {
@@ -100,17 +102,54 @@ namespace ParserCSVTest
                     line = generateCSV.GenerateLine();
                     sw.WriteLine(line);
                 }
-                Console.WriteLine();
             }
             t.Stop();
-            Console.WriteLine("Passed: {0}", t.Elapsed);
+            Console.WriteLine("\nPassed: {0}", t.Elapsed);
         }
 
-        public void ReadFile2DB()
+        public void ReadFile2DB(long iter = 10, int progLength = 20) //to do multiple versions
         {
-            
+            DBSet db = new DBSet();
+            var Cols = db.Tables[0].Columns.Cast<DataColumn>().Where(x => x.ColumnName != "id").Select(y => y.ColumnName).ToList();
+            //var Cols = (from dc in db.DataTable1.Columns.Cast<DataColumn>()
+            //            where dc.ColumnName != "id"
+            //             select dc.ColumnName).ToList();
+
+            //Cols.ForEach(Console.WriteLine);
+            string line;
+
+            Stopwatch t = new Stopwatch();
+            t.Start();
+
+            using (StreamReader sr = new StreamReader(myFn))
+            {
+                int i = 1;
+                long progress = iter / progLength;
+                Console.Write("\nProg.: [" + new string(' ', progLength) + "]");
+                Console.SetCursorPosition(Console.CursorLeft - progLength - 1, Console.CursorTop);
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (i++ % progress == 0)
+                        Console.Write("*");
+
+                    List<string> newDataRow = line.Split(',').Take(6).ToList();
+                    newDataRow = newDataRow.Select(s => s.Replace('.', ',')).ToList(); //Double
+
+                    DataRow dr = db.Tables[0].NewRow();
+                    Cols.ForEach( x => dr[x.ToString()] = newDataRow[Cols.IndexOf(x.ToString())] );
+                    db.Tables[0].Rows.Add(dr);
+                }
+            }
+            t.Stop();
+            Console.WriteLine("\nPassed: {0}", t.Elapsed);
         }
-    }
+
+        public string ListDB()
+        {
+            DBSet db = new DBSet();
+        }
+}
 
 
     public class Program
@@ -119,15 +158,19 @@ namespace ParserCSVTest
         {
             string myPath = Environment.CurrentDirectory;
             FileCSV csv = new FileCSV(myPath, "Teste.csv");
+            int rows = (int)Math.Pow(10, 5);
+            int progress = 40;
 
-            csv.Write2File((int)Math.Pow(10,7), 40);
+            csv.Write2File(rows, progress);
 
             //for (int i = 0; i < 10; i++)
             //{
             //    string s = generateCSV.GenerateLine();
             //    Console.WriteLine("Res: " + s);
             //}
-            
+
+            csv.ReadFile2DB(rows, progress);
+
             Console.ReadLine();
         }
     }
