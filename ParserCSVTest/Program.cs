@@ -5,21 +5,6 @@ using System.Text;
 
 namespace ParserCSVTest
 {
-    public sealed class Circle
-    {
-        private double radius;
-
-        public double Calculate(Func<double, double> op)
-        {
-            return op(radius);
-        }
-
-        public void print()
-        {
-            Console.WriteLine(radius);
-        }
-    }
-
     public class Program
     {
         private void tryGenerator()
@@ -44,11 +29,8 @@ namespace ParserCSVTest
 
         public static void Main(string[] args)
         {
-            Circle c = new Circle();
-            c.Calculate(r => 2 * Math.PI * r);
-            c.print();
-
-            //Program.version1();
+            
+            Program.version1();
             Console.ReadLine();
         }
     }
