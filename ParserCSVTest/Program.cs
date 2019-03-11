@@ -5,10 +5,17 @@ using System.Text;
 
 namespace ParserCSVTest
 {
-
     public class Program
     {
         public static void Main(string[] args)
+        {
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    string s = generateCSV.GenerateLine();
+            //    Console.WriteLine("Res: " + s);
+            //}
+        }
+        private static void version1()
         {
             string myPath = Environment.CurrentDirectory;
             IFileCSV csv = new FileCSV(myPath, "Teste.csv");
@@ -23,8 +30,10 @@ namespace ParserCSVTest
             //    Console.WriteLine("Res: " + s);
             //}
 
-            csv.ReadFile2DB(rows, progress);
+        public static void Main(string[] args)
+        {
 
+            Program.version1();
             Console.ReadLine();
         }
     }
