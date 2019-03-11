@@ -55,9 +55,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ParserCSVTest\ParserCSVTest.csproj">
+    <ProjectReference Include="..\ParserCSVTest\ParserCSV.csproj">
       <Project>{5ACD31A5-7CC1-4B5F-807A-667DCE95B5E2}</Project>
-      <Name>ParserCSVTest</Name>
+      <Name>ParserCSV</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
