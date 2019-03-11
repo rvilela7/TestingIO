@@ -7,7 +7,7 @@ namespace ParserCSVTest
 {
     public class Program
     {
-        public static void Main(string[] args)
+        private void generateCSV()
         {
             //for (int i = 0; i < 10; i++)
             //{
@@ -24,11 +24,8 @@ namespace ParserCSVTest
 
             csv.Write2File(rows, progress);
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    string s = generateCSV.GenerateLine();
-            //    Console.WriteLine("Res: " + s);
-            //}
+            csv.ReadFile2DB(rows, progress);
+        }
 
         public static void Main(string[] args)
         {
