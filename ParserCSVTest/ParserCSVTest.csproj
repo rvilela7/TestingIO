@@ -64,6 +64,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Data\MyDataBase.cs" />
+    <Compile Include="FileCSV.cs" />
+    <Compile Include="Libs\MyProgBar.cs" />
+    <Compile Include="Libs\MyWatch.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
