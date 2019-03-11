@@ -10,7 +10,7 @@ using ParserCSVTest.Data;
 
 namespace ParserCSVTest
 {
-    public class FileCSV
+    public class FileCSV : IFileCSV
     {
         public class GenerateCSV
         {
@@ -79,7 +79,7 @@ namespace ParserCSVTest
                 throw new Exception("Cannot delete file", ex);
             }
         }
-        public void Write2File(long iter = 10, int progLength = 20)
+        public void Write2File(long iterations = 10, int progLength = 20)
         {
             MyWatch t = new MyWatch();
             GenerateCSV generateCSV = new GenerateCSV();
@@ -89,10 +89,10 @@ namespace ParserCSVTest
             using (StreamWriter sw = new StreamWriter(myFn))
             {
                 string line;
-                MyProgBar progressBar = new MyProgBar(iter, progLength);
+                MyProgBar progressBar = new MyProgBar(iterations, progLength);
                 progressBar.Init();
 
-                for (int i = 1; i <= iter; i++)
+                for (int i = 1; i <= iterations; i++)
                 {
                     progressBar.Step(i);
                     line = generateCSV.GenerateLine();
@@ -103,7 +103,7 @@ namespace ParserCSVTest
 
         }
 
-        public void ReadFile2DB(long iter = 10, int progLength = 20) //to do multiple versions
+        public void ReadFile2DB(long iterations = 10, int progressLength = 20) //to do multiple versions
         {
             MyDataBase dtb = new MyDataBase();
             var db = dtb.db;
@@ -120,7 +120,7 @@ namespace ParserCSVTest
             using (StreamReader sr = new StreamReader(myFn))
             {
                 int i = 1;
-                MyProgBar progressBar = new MyProgBar(iter, progLength);
+                MyProgBar progressBar = new MyProgBar(iterations, progressLength);
                 progressBar.Init();
 
                 while ((line = sr.ReadLine()) != null)

@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Data\MyDataBase.cs" />
     <Compile Include="FileCSV.cs" />
+    <Compile Include="IFileCSV.cs" />
     <Compile Include="Libs\MyProgBar.cs" />
     <Compile Include="Libs\MyWatch.cs" />
     <Compile Include="Program.cs" />

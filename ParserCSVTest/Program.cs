@@ -11,7 +11,7 @@ namespace ParserCSVTest
         public static void Main(string[] args)
         {
             string myPath = Environment.CurrentDirectory;
-            FileCSV csv = new FileCSV(myPath, "Teste.csv");
+            IFileCSV csv = new FileCSV(myPath, "Teste.csv");
             int rows = (int)Math.Pow(10, 5);
             int progress = 40;
 
