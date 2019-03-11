@@ -10,6 +10,72 @@ using System.Data;
 
 namespace ParserCSVTest
 {
+    public class MyProgBar
+    {
+        private long iterations; //Ciclo
+        private int stepDivider; //Divisor
+        private long progress; 
+
+        public MyProgBar(long iter, int progLength)
+        {
+            this.iterations = iter;
+            this.stepDivider = progLength;
+            this.progress = iter / progLength;
+        }
+
+        public void Init()
+        { 
+            Console.Write("\nProg.: [" + new string(' ', stepDivider) + "]");
+            Console.SetCursorPosition(Console.CursorLeft - stepDivider - 1, Console.CursorTop);
+        }
+
+        public void Step(long i)
+        {
+            if (i % progress == 0)
+                Console.Write("*");
+        }
+    }
+
+    public sealed class MyDataBase
+    {
+        public DBSet db;
+        public MyDataBase()
+        {
+            db = new DBSet();
+        }
+    }
+
+    public class MyWatch
+    {
+        public Stopwatch myWatch;
+
+        public MyWatch()
+        {
+            myWatch = new Stopwatch();
+        }
+
+        public void Start()
+        {
+            myWatch.Start();
+        }
+
+        public void Stop()
+        {
+            myWatch.Stop();
+        }
+
+        public void Print()
+        {
+            Console.WriteLine("\nPassed: {0}", myWatch.Elapsed);
+        }
+
+        public void StopAndPrint()
+        {
+            Stop();
+            Print();
+        }
+    }
+
 
     public class GenerateCSV
     {
@@ -83,7 +149,7 @@ namespace ParserCSVTest
         }
         public void Write2File(long iter = 10, int progLength = 20)
         {
-            Stopwatch t = new Stopwatch();
+            MyWatch t = new MyWatch();
             GenerateCSV generateCSV = new GenerateCSV();
 
             t.Start();
@@ -91,25 +157,24 @@ namespace ParserCSVTest
             using (StreamWriter sw = new StreamWriter(myFn))
             {
                 string line;
-                long progress = iter / progLength;
-                Console.Write("\nProg.: [" + new string(' ', progLength) + "]");
-                Console.SetCursorPosition(Console.CursorLeft - progLength - 1, Console.CursorTop);
+                MyProgBar progressBar = new MyProgBar( iter, progLength );
+                progressBar.Init();
 
                 for (int i = 1; i <= iter; i++)
                 {
-                    if (i % progress == 0)
-                        Console.Write("*");
+                    progressBar.Step(i);
                     line = generateCSV.GenerateLine();
                     sw.WriteLine(line);
                 }
             }
-            t.Stop();
-            Console.WriteLine("\nPassed: {0}", t.Elapsed);
+            t.StopAndPrint();
+
         }
 
         public void ReadFile2DB(long iter = 10, int progLength = 20) //to do multiple versions
         {
-            DBSet db = new DBSet();
+            MyDataBase dtb = new MyDataBase();
+            var db = dtb.db;
             var Cols = db.Tables[0].Columns.Cast<DataColumn>().Where(x => x.ColumnName != "id").Select(y => y.ColumnName).ToList();
             //var Cols = (from dc in db.DataTable1.Columns.Cast<DataColumn>()
             //            where dc.ColumnName != "id"
@@ -118,21 +183,17 @@ namespace ParserCSVTest
             //Cols.ForEach(Console.WriteLine);
             string line;
 
-            Stopwatch t = new Stopwatch();
-            t.Start();
+            MyWatch t = new MyWatch();
 
             using (StreamReader sr = new StreamReader(myFn))
             {
                 int i = 1;
-                long progress = iter / progLength;
-                Console.Write("\nProg.: [" + new string(' ', progLength) + "]");
-                Console.SetCursorPosition(Console.CursorLeft - progLength - 1, Console.CursorTop);
+                MyProgBar progressBar = new MyProgBar(iter, progLength);
+                progressBar.Init();
 
                 while ((line = sr.ReadLine()) != null)
                 {
-                    if (i++ % progress == 0)
-                        Console.Write("*");
-
+                    progressBar.Step(i++);
                     List<string> newDataRow = line.Split(',').Take(6).ToList();
                     newDataRow = newDataRow.Select(s => s.Replace('.', ',')).ToList(); //Double
 
@@ -141,13 +202,14 @@ namespace ParserCSVTest
                     db.Tables[0].Rows.Add(dr);
                 }
             }
-            t.Stop();
-            Console.WriteLine("\nPassed: {0}", t.Elapsed);
+
+            t.StopAndPrint();
         }
 
         public string ListDB()
         {
-            DBSet db = new DBSet();
+            //DBSet db = new DBSet();
+            return "";
         }
 }
 
