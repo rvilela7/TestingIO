@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ParserCSVTest.Tests
 {
@@ -34,18 +35,32 @@ namespace ParserCSVTest.Tests
         {
             using (FileCSV csv = new FileCSV(myPath, myFn))
             {
-                csv.touchFile();
+                csv.TouchFile();
                 Assert.IsTrue(File.Exists(csv.path));
                 csv.DeleteFile();
                 Assert.IsFalse(File.Exists(csv.path));
             }
         }
 
-        [Ignore]
-        [TestMethod()]
-        public void Write2FileTest()
+        [DataTestMethod]
+        //Cannot test second parameter
+        [DataRow( 10000 , 40)]
+        [DataRow( 100 , 10)]
+        public void Write2FileTest(int rows, int progress)
         {
-            Assert.Fail();
+            using (FileCSV csv = new FileCSV(myPath, myFn))
+            {
+                csv.Write2File(rows, progress);
+                Assert.IsTrue(File.Exists(csv.path));
+                String[] fl = File.ReadAllLines(csv.path);
+                Assert.IsTrue(fl.Count() == rows);
+                Random r = new Random();
+                for (int i = 0; i < 10; i++)
+                {
+                    Assert.IsTrue(Regex.IsMatch(fl[r.Next(rows)], @"^[A-Z]+,\d,\d+,\d+,\d+,\d+\.\d.,,$")); //MNO,3,813496,36,30000,78.19
+                }
+                //File will be recreated on second datarow
+            }
         }
 
         [Ignore]
@@ -56,11 +71,11 @@ namespace ParserCSVTest.Tests
         }
 
         [TestMethod()]
-        public void touchFileTest()
+        public void TouchFileTest()
         {
             using (FileCSV csv = new FileCSV(myPath, myFn))
             {
-                csv.touchFile();
+                csv.TouchFile();
                 Assert.IsTrue(File.Exists(csv.path));
             }
         }

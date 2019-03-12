@@ -74,10 +74,10 @@ namespace ParserCSVTest
 
             myPath = path;
             myFn = Path.Combine(path, file);
-            this.DeleteFile(); //Cleanup
+            //this.DeleteFile(); //Cleanup
         }
 
-        public void touchFile()
+        public void TouchFile()
         {
             using (FileStream fs = File.Open(myFn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {

@@ -22,7 +22,13 @@ namespace ParserCSVTest.Libs
         public void Init()
         {
             Console.Write("\nProg.: [" + new string(' ', stepDivider) + "]");
-            Console.SetCursorPosition(Console.CursorLeft - stepDivider - 1, Console.CursorTop);
+            try {
+                Console.SetCursorPosition(Console.CursorLeft - stepDivider - 1, Console.CursorTop);
+            }
+            catch (System.IO.IOException ex)
+            {
+                //TestUnit issue due to CursorLeft/CursorTop
+            }
         }
 
         public void Step(long i)

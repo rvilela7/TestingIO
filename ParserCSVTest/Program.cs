@@ -20,7 +20,7 @@ namespace ParserCSVTest
             string myPath = Environment.CurrentDirectory;
             using (FileCSV csv = new FileCSV(myPath, "data.csv"))
             {
-                int rows = (int)Math.Pow(10, 5);
+                long rows = (long)Math.Pow(10, 5);
                 int progress = 40;
                 csv.DeleteFile();
                 csv.Write2File(rows, progress);
@@ -31,8 +31,7 @@ namespace ParserCSVTest
         public static void Main(string[] args)
         {
 
-            //Program.version1();
-            
+            Program.version1();
             Console.ReadLine();
         }
     }
