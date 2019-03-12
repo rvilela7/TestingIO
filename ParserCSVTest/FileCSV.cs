@@ -10,7 +10,7 @@ using ParserCSVTest.Data;
 
 namespace ParserCSVTest
 {
-    public class FileCSV : IFileCSV
+    public class FileCSV : IDisposable
     {
         public class GenerateCSV
         {
@@ -56,6 +56,15 @@ namespace ParserCSVTest
 
         private string myPath;
         private string myFn;
+        public string path
+        {
+            get
+            {
+                return myFn;
+            }
+        }
+
+
         public FileCSV(string path, string file)
         {
             if (!Directory.Exists(path))
@@ -65,8 +74,18 @@ namespace ParserCSVTest
 
             myPath = path;
             myFn = Path.Combine(path, file);
-            this.DeleteFile();
+            this.DeleteFile(); //Cleanup
         }
+
+        public void touchFile()
+        {
+            using (FileStream fs = File.Open(myFn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                fs.Close();
+                File.SetLastWriteTimeUtc(myFn , DateTime.UtcNow);
+            }
+        }
+
         public void DeleteFile()
         {
             try
@@ -143,5 +162,45 @@ namespace ParserCSVTest
             //DBSet db = new DBSet();
             return "";
         }
+
+        public void Dispose()
+        {
+            // If this function is being called the user wants to release the
+            // resources. lets call the Dispose which will do this for us.
+            Dispose(true);
+            // Now since we have done the cleanup already there is nothing left
+            // for the Finalizer to do. So lets tell the GC not to call it later.
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing == true)
+            {
+                //someone want the deterministic release of all resources
+                //Let us release all the managed resources
+                DeleteFile();
+            }
+            else
+            {
+                // Do nothing, no one asked a dispose, the object went out of
+                // scope and finalized is called so lets next round of GC 
+                // release these resources
+            }
+
+            // Release the unmanaged resource in any case as they will not be 
+            // released by GC
+            //ReleaseUnmangedResources();
+        }
+
+        ~FileCSV()
+        {
+            // The object went out of scope and finalized is called
+            // Lets call dispose in to release unmanaged resources 
+            // the managed resources will anyways be released when GC 
+            // runs the next time.
+            Dispose(false);
+        }
+
     }
 }
